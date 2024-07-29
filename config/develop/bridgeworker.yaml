@@ -1,25 +1,23 @@
 template_path: bridgeworker.yaml
 stack_name: bridgeworker-develop
 parameters:
-  AwsDefaultVpcId: vpc-f389e98a
-  AwsSnsNotificationEndpoint: bridgeworker-develop@sagebase.org
-  BackfillBucket: org-sagebridge-backfill-devdevelop
+  AwsDefaultVpcId: vpc-08383f78519fe72ef
+  AwsSnsNotificationEndpoint: biaffect-bridge-ops-develop@googlegroups.com
+  BackfillBucket: org-biaffectbridge-backfill-develop
   BridgeEnv: dev
-  BridgeUser: heroku
-  BridgeWorkerEmail: bridgeit+worker@sagebase.org
+  BridgeUser: biaffect
+  BridgeWorkerEmail: biaffect-bridge-ops-develop+worker@googlegroups.com
   BridgeWorkerStudy: api
   BridgeWorkerPassword: !ssm /bridgeworker-develop/BridgeWorkerPassword
   EC2InstanceType: t3a.small
   Env: develop
-  NewRelicAppName: bridgeworker-develop
-  NewRelicLicenseKey: !ssm /infra/NewRelicLicenseKey
-  RawHealthDataBucket: org-sagebridge-rawhealthdata-devdevelop
+  RawHealthDataBucket: org-biaffectbridge-rawhealthdata-develop
   SynapseAccessToken:  !ssm /bridgeworker-develop/SynapseAccessToken
-  SynapsePrincipalId: '3336429'
-  SynapseUser: bridgetest
-  UploadBucket: org-sagebridge-upload-devdevelop
-  UploadCertBucket: org-sagebridge-upload-cms-cert-devdevelop
-  UploadPrivateKeyBucket: org-sagebridge-upload-cms-priv-devdevelop
-  UserDataBucket: org-sagebridge-userdata-devdevelop
-  ParticipantRosterBucket: org-sagebridge-participantroster-devdevelop
-  WorkerSqsQueueUrl: https://sqs.us-east-1.amazonaws.com/420786776710/Bridge-WorkerPlatform-Request-develop
+  SynapsePrincipalId: '3509740'
+  SynapseUser: BiaffectBridgeExporter
+  UploadBucket: org-biaffectbridge-upload-develop
+  UploadCertBucket: org-biaffectbridge-upload-cms-cert-develop
+  UploadPrivateKeyBucket: org-biaffectbridge-upload-cms-priv-develop
+  UserDataBucket: org-biaffectbridge-userdata-develop
+  ParticipantRosterBucket: org-biaffectbridge-participantroster-develop
+  WorkerSqsQueueUrl: https://sqs.us-east-1.amazonaws.com/381492192635/Bridge-WorkerPlatform-Request-develop

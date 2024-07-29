@@ -34,11 +34,6 @@ Parameters:
   JavaHeapSize:
     Type: String
     Default: 1g
-  NewRelicAppName:
-    Type: String
-  NewRelicLicenseKey:
-    Type: String
-    NoEcho: true
   RawHealthDataBucket:
     Type: String
   SynapseAccessToken:
@@ -65,7 +60,7 @@ Resources:
     Type: 'AWS::ElasticBeanstalk::ConfigurationTemplate'
     Properties:
       ApplicationName: !Ref AWSEBApplication
-      SolutionStackName: '64bit Amazon Linux 2 v4.2.11 running Tomcat 8.5 Corretto 8'
+      SolutionStackName: '64bit Amazon Linux 2 v4.6.0 running Tomcat 8.5 Corretto 8'
       OptionSettings:
         # EB environment options
         - Namespace: 'aws:elasticbeanstalk:xray'
@@ -79,22 +74,32 @@ Resources:
           Value: !Ref EC2InstanceType
         - Namespace: 'aws:autoscaling:launchconfiguration'
           OptionName: SecurityGroups
+          Value: !Ref AWSEC2SecurityGroup
+        # Public,Public1,Public2
+        - Namespace: 'aws:ec2:vpc'
+          OptionName: ELBSubnets
           Value: !Join
-            - '-'
-            - - !Ref 'AWS::StackName'
-              - AWSEC2SecurityGroup
+            - ','
+            - - 'subnet-00e1112781e2100b0'
+              - 'subnet-05a42a6abdb678332'
+              - 'subnet-0717a03d09d1299dc'
+        # Private,Private1,Private2
+        - Namespace: 'aws:ec2:vpc'
+          OptionName: Subnets
+          Value: !Join
+            - ','
+            - - 'subnet-0c914eb7292a302fc'
+              - 'subnet-09790b48060420f4c'
+              - 'subnet-074665325c1b2aa25'
+        - Namespace: 'aws:ec2:vpc'
+          OptionName: VPCId
+          Value: !Ref AwsDefaultVpcId
         - Namespace: 'aws:elasticbeanstalk:command'
           OptionName: DeploymentPolicy
           Value: 'AllAtOnce'
         - Namespace: 'aws:elasticbeanstalk:environment'
           OptionName: EnvironmentType
           Value: 'SingleInstance'
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: NEW_RELIC_APP_NAME
-          Value: !Ref 'NewRelicAppName'
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: NEW_RELIC_LICENSE_KEY
-          Value: !Ref NewRelicLicenseKey
         - Namespace: 'aws:elasticbeanstalk:environment'
           OptionName: ServiceRole
           Value: !Ref AWSIAMServiceRole
@@ -390,7 +395,7 @@ Resources:
                   - - 'arn:aws:iam::'
                     - !Ref AWS::AccountId
                     - ':root'
-                - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
+                - 'arn:aws:iam::381492192635:role/cf.service'
             Action:
               - "kms:Create*"
               - "kms:Describe*"
@@ -415,7 +420,7 @@ Resources:
                   - - 'arn:aws:iam::'
                     - !Ref AWS::AccountId
                     - ':root'
-                - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
+                - 'arn:aws:iam::381492192635:role/cf.service'
                 - !GetAtt AWSIAMBridgeWorkerServiceUser.Arn
             Action:
               - "kms:Encrypt"
